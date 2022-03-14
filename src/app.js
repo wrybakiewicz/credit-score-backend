@@ -6,7 +6,7 @@ const morgan = require('morgan');
 
 const app = express();
 
-const creditScore = [
+const exampleCreditScore = [
     {score: 910,
     details: {
         addressCreation: {
@@ -51,15 +51,26 @@ const creditScore = [
     }}
 ];
 
+/** Initialize express js rest api */
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan('combined'));
 
+/** health check endpoint */
 app.get('/', (req, res) => {
-    res.send(creditScore);
+    res.send("OK");
 });
 
-app.listen(process.env.PORT || 5000, () => {
-    console.log('listening on port 3001');
+/** credit score endpoint */
+app.get('/credit-score/:address', (req, res) => {
+    const address = req.params.address;
+    console.log("Calculating score for address: ", address);
+    res.send(exampleCreditScore);
+});
+
+/** Deploy server */
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+    console.log('listening on port ' + port);
 });
