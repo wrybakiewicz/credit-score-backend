@@ -1,3 +1,5 @@
+.PHONY: test
+
 install:
 	npm install
 
@@ -5,4 +7,10 @@ start:
 	npm start
 
 request:
-	curl http://localhost:5000/credit-score/0x78C32b95ace4Ce2AC2E02c3B5F955f2DC18d0040
+	curl http://localhost:5000/credit-score/0x8A03E0daB7E83076Af7200B09780Af7856F0298D
+
+request_example:
+	curl http://localhost:5000/example
+
+test:
+	npm test
