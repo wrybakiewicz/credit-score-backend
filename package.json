@@ -19,9 +19,11 @@
   },
   "homepage": "https://github.com/wrybakiewicz/credit-score-backend#readme",
   "dependencies": {
+    "axios": "^0.26.1",
     "body-parser": "^1.19.2",
     "chai": "^4.3.6",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
     "ethers": "^5.6.0",
     "express": "^4.17.3",
     "helmet": "^5.0.2",
