@@ -4,6 +4,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 
+const {getCreditScore} = require("./service/getCreditScore");
+
 const app = express();
 
 const exampleCreditScore = [
@@ -11,8 +13,7 @@ const exampleCreditScore = [
     details: {
         addressCreation: {
             created: "2020-01-01 10:55:55",
-            score: 700,
-            wage: 40
+            lifetimeInDays: 100
         },
         tokenHoldings: {
             holdings: [
@@ -21,32 +22,22 @@ const exampleCreditScore = [
                     from: "2020-01-01 10:55:55",
                     amount: 10,
                     value: 30000,
-                    score: 600,
-                    wage: 30
                 },
                 {
                     token: "WBTC",
                     from: "2020-01-01 10:55:55",
                     amount: 3,
                     value: 70000,
-                    score: 800,
-                    wage: 70
                 }
             ],
-            score: 950,
-            wage: 20
         },
         social: {
             followers: {
                 count: 900,
-                wage: 95
             },
             followings: {
                 count: 10000,
-                wage: 5
-            },
-            score: 800,
-            wage: 40
+            }
         }
     }}
 ];
@@ -57,16 +48,17 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan('combined'));
 
-/** health check endpoint */
-app.get('/', (req, res) => {
-    res.send("OK");
+/** example response of credit score (for frontend integration) - to delete */
+app.get('/example', (req, res) => {
+    res.send(exampleCreditScore);
 });
 
 /** credit score endpoint */
-app.get('/credit-score/:address', (req, res) => {
+app.get('/credit-score/:address', async (req, res) => {
     const address = req.params.address;
     console.log("Calculating score for address: ", address);
-    res.send(exampleCreditScore);
+    const creditScore = await getCreditScore(address);
+    res.send(creditScore);
 });
 
 /** Deploy server */
