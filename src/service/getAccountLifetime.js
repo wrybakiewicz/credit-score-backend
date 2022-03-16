@@ -1,6 +1,9 @@
 const ethers = require("ethers");
 const moment = require("moment");
 
+/** Account lifetime in days for which user get max score*/
+const ACCOUNT_LIFETIME_MAX_SCORE_VALUE = 365;
+
 const etherscanProvider = new ethers.providers.EtherscanProvider();
 
 /** Calculate account lifetime - days between first transactions and now
@@ -10,6 +13,15 @@ const etherscanProvider = new ethers.providers.EtherscanProvider();
 function getAccountLifetime(address) {
     return etherscanProvider.getHistory(address)
         .then(history => getLifetime(history));
+}
+
+/** Calculate score from account lifetime
+ * params: account lifetime
+ * returns: number - score from 0 to 1000, accounts >= 1 year get 1000 */
+function calculateAccountLifetimeScore(accountLifetime) {
+    const actualToMaxValueProportion = accountLifetime.lifetimeInDays / ACCOUNT_LIFETIME_MAX_SCORE_VALUE;
+    const score = actualToMaxValueProportion * 1000;
+    return Math.min(score, 1000);
 }
 
 function getLifetime(history) {
@@ -28,4 +40,4 @@ function getLifetime(history) {
     }
 }
 
-module.exports = {getAccountLifetime};
+module.exports = {getAccountLifetime, calculateAccountLifetimeScore};
