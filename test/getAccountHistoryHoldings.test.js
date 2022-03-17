@@ -20,7 +20,7 @@ describe('test getAccountHistoryHoldings', function () {
 
     it('should return token balances for another address', async function () {
         const holdings = await getAccountHistoryHoldings("0xc2380ded7219198f5195117c395d18c2b1ed50a3");
-        expect(holdings.length).to.be.equal(13);
+        expect(holdings.length).to.be.equal(14);
         holdings.forEach(holding => {
             expect(holding.tokenTicker).to.be.an("string");
             expect(holding.token).to.be.an("string");

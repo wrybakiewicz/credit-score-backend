@@ -15,7 +15,11 @@ function getAccountHistoryHoldings(address) {
     return axios.get(API_URL + address + '/portfolio_v2' + API_KEY)
         .then(response => response.data.data.items)
         .then(items => items.map(item => getHistoryHoldingData(item)))
-        .then(holdingDataArray => holdingDataArray.filter(element => element.averageValue > 0));
+        .then(holdingDataArray => holdingDataArray.filter(element => element.averageValue > 0))
+        .catch(error => {
+            console.error(error);
+            throw error;
+        });
 }
 
 /** Calculate score from holdings
