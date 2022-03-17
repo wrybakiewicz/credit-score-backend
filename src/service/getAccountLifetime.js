@@ -12,7 +12,11 @@ const etherscanProvider = new ethers.providers.EtherscanProvider();
  * */
 function getAccountLifetime(address) {
     return etherscanProvider.getHistory(address)
-        .then(history => getLifetime(history));
+        .then(history => getLifetime(history))
+        .catch(error => {
+            console.error(error);
+            throw error;
+        });
 }
 
 /** Calculate score from account lifetime
