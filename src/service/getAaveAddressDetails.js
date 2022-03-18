@@ -81,7 +81,7 @@ function mapToBorrowHistory(aaveBorrowHistory) {
         return {
             amount: parseInt(record.amount),
             decimals: record.reserve.decimals,
-            currentEthPrice: record.reserve.price.priceInEth,
+            currentEthPrice: parseInt(record.reserve.price.priceInEth),
             name: record.reserve.name,
             symbol: record.reserve.symbol,
             dateTime: formatMomentAsDateTime(moment.unix(record.timestamp))
@@ -95,7 +95,7 @@ function mapToLiquidationHistory(aaveLiquidationHistory) {
        return {
            amount: parseInt(record.principalAmount),
            decimals: record.principalReserve.decimals,
-           currentEthPrice: record.principalReserve.price.priceInEth,
+           currentEthPrice: parseInt(record.principalReserve.price.priceInEth),
            name: record.principalReserve.name,
            symbol: record.principalReserve.symbol,
            dateTime: formatMomentAsDateTime(moment.unix(record.timestamp))
@@ -108,7 +108,7 @@ function mapToRepayHistory(aaveRepayHistory) {
         return {
             amount: parseInt(record.amount),
             decimals: record.reserve.decimals,
-            currentEthPrice: record.reserve.price.priceInEth,
+            currentEthPrice: parseInt(record.reserve.price.priceInEth),
             name: record.reserve.name,
             symbol: record.reserve.symbol,
             dateTime: formatMomentAsDateTime(moment.unix(record.timestamp))

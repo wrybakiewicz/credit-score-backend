@@ -8,7 +8,30 @@ describe('test getAaveAddressDetails', function () {
         expect(aaveDetails.borrowHistory.length).to.be.greaterThanOrEqual(16);
         expect(aaveDetails.liquidationHistory.length).to.be.greaterThanOrEqual(3);
         expect(aaveDetails.repayHistory.length).to.be.greaterThanOrEqual(4);
-        //TODO: more tests
+        aaveDetails.liquidationHistory.forEach(element => {
+            expect(element.amount).to.be.greaterThanOrEqual(0);
+            expect(element.decimals).to.be.greaterThanOrEqual(0);
+            expect(element.currentEthPrice).to.be.greaterThanOrEqual(0);
+            expect(element.name).to.be.an('string');
+            expect(element.symbol).to.be.an('string');
+            expect(element.dateTime).to.be.an('string');
+        });
+        aaveDetails.borrowHistory.forEach(element => {
+            expect(element.amount).to.be.greaterThanOrEqual(0);
+            expect(element.decimals).to.be.greaterThanOrEqual(0);
+            expect(element.currentEthPrice).to.be.greaterThanOrEqual(0);
+            expect(element.name).to.be.an('string');
+            expect(element.symbol).to.be.an('string');
+            expect(element.dateTime).to.be.an('string');
+        });
+        aaveDetails.repayHistory.forEach(element => {
+            expect(element.amount).to.be.greaterThanOrEqual(0);
+            expect(element.decimals).to.be.greaterThanOrEqual(0);
+            expect(element.currentEthPrice).to.be.greaterThanOrEqual(0);
+            expect(element.name).to.be.an('string');
+            expect(element.symbol).to.be.an('string');
+            expect(element.dateTime).to.be.an('string');
+        });
     });
 
 });
