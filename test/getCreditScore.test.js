@@ -8,7 +8,7 @@ describe('test getCreditScore', function () {
         expect(creditScore.basicScore).to.be.greaterThanOrEqual(0);
         //address creation details
         expect(creditScore.details.addressCreation.lifetimeInDays).to.be.greaterThanOrEqual(469);
-        expect(creditScore.details.addressCreation.created).to.be.equal("12/02/2020");
+        expect(creditScore.details.addressCreation.created).to.be.equal("02/12/2020");
         expect(creditScore.details.addressCreation.score).to.be.greaterThanOrEqual(0);
         expect(creditScore.details.addressCreation.wage).to.be.equal(0.25);
         //token holdings details

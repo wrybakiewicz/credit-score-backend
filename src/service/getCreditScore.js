@@ -1,5 +1,5 @@
 const {getAccountLifetime, calculateAccountLifetimeScore} = require("./getAccountLifetime");
-const {formatMoment} = require("./helpers");
+const {formatMomentAsDate} = require("./helpers");
 const {getAccountHistoryHoldings, calculateAccountHistoryHoldingsScore} = require("./getAccountHistoryHoldings");
 const {getPoaps, calculatePoapsCreditScore} = require("./getPoaps");
 const {retryIfFailed} = require("./retryService");
@@ -32,7 +32,7 @@ function getCreditScore(address) {
                     details: {
                         addressCreation: {
                             lifetimeInDays: accountLifetime.lifetimeInDays,
-                            created: formatMoment(accountLifetime.created),
+                            created: formatMomentAsDate(accountLifetime.created),
                             score: addressCreationScore,
                             wage: ADDRESS_CREATION_WAGE
                         },

@@ -6,6 +6,6 @@
 - curl
 
 ### How to run:
-- get covalenthq api key and assign it to API_KEY constant into `.env` file eg. `API_KEY=xxx` 
+- get from admin & set `COVALENTHQ_API_KEY` and `THE_GRAPH_KEY` in `.env` file 
 - `make install start` - to start server
 - `make request` - in another tab

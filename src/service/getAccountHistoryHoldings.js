@@ -2,7 +2,7 @@ const axios = require('axios');
 require('dotenv').config();
 
 const API_URL = "https://api.covalenthq.com/v1/1/address/"
-const API_KEY = process.env.API_KEY
+const COVALENTHQ_API_KEY = process.env.COVALENTHQ_API_KEY
 
 /** Account holdings average value for which user get max score*/
 const ACCOUNT_HOLDINGS_MAX_SCORE_VALUE = 100_000;
@@ -12,7 +12,7 @@ const ACCOUNT_HOLDINGS_MAX_SCORE_VALUE = 100_000;
  * returns: [{tokenTicker: string, token: string, decimals: string, averageBalance, averageValue}, ...]
  * */
 function getAccountHistoryHoldings(address) {
-    return axios.get(API_URL + address + '/portfolio_v2' + API_KEY)
+    return axios.get(API_URL + address + '/portfolio_v2' + COVALENTHQ_API_KEY)
         .then(response => response.data.data.items)
         .then(items => items.map(item => getHistoryHoldingData(item)))
         .then(holdingDataArray => holdingDataArray.filter(element => element.averageValue > 0))

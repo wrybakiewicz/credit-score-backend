@@ -1,6 +1,6 @@
 const axios = require("axios");
 const moment = require("moment");
-const {formatMoment} = require("./helpers");
+const {formatMomentAsDate} = require("./helpers");
 
 const POAPS_URL = "https://api.poap.xyz/actions/scan/"
 
@@ -35,7 +35,7 @@ function mapResponseToPoaps(response) {
         return {
             name: poap.event.name,
             imageUrl: poap.event.image_url,
-            dateTime: formatMoment(moment(poap.created, "YYYY-MM-DD")),
+            dateTime: formatMomentAsDate(moment(poap.created, "YYYY-MM-DD")),
             holdingDurationInDays: moment().diff(creationDate, 'days')
         }
     });
