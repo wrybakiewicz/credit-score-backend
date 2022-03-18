@@ -7,7 +7,7 @@ const headers = {
 
 
 
-///////////////////Twitter///////////////////////////////
+//////////////////////Twitter///////////////////////////
 const GetFollowTwitterList = async (userId) => {
     const url_followers = `https://api.twitter.com/2/users/${userId}/followers`;
     const url_following = `https://api.twitter.com/2/users/${userId}/following`;
@@ -94,6 +94,58 @@ function GetIdentityList(address, itms){
     IdentityQuery(address, itms)}).then(response => {return {"follows": response.data["data"]["identity"], "address": address}});
 };
 
+/////////////////////////SCORE FUNCTIONS/////////////////////////
+async function GetTwitterScore(id) {
 
-module.exports =  {GetIdentityList, GetFollowTwitterList};
+    MAX_CONSIDERABLE_AMOUNT_FOLLOWERS = 20000;
+    MIN_CONSIDERABLE_AMOUNT_FOLLOWERS = 1000;
+    follows_data = await GetFollowTwitterList(id)
+    followers = follows_data["followers"];
+    if (followers < MIN_CONSIDERABLE_AMOUNT_FOLLOWERS){
+    return 0
+    }
+    else if(followers < MAX_CONSIDERABLE_AMOUNT_FOLLOWERS){
+    return parseInt((followers - MIN_CONSIDERABLE_AMOUNT_FOLLOWERS)/(MAX_CONSIDERABLE_AMOUNT_FOLLOWERS-MIN_CONSIDERABLE_AMOUNT_FOLLOWERS)*1000);
+    }
+    else{
+    return 1000;
+    }
+
+}
+function countScore(follows_data){
+    MAX_CONSIDERABLE_AMOUNT_FOLLOWERS = 200;
+    MIN_CONSIDERABLE_AMOUNT_FOLLOWERS = 10;
+    followers = follows_data["follows"]["followerCount"];
+        if (followers < MIN_CONSIDERABLE_AMOUNT_FOLLOWERS){
+        return 0
+        }
+        else if(followers < MAX_CONSIDERABLE_AMOUNT_FOLLOWERS){
+        return parseInt((followers - MIN_CONSIDERABLE_AMOUNT_FOLLOWERS)/(MAX_CONSIDERABLE_AMOUNT_FOLLOWERS-MIN_CONSIDERABLE_AMOUNT_FOLLOWERS)*1000);
+        }
+        else{
+        return 1000;
+        }
+}
+
+function GetCyberConnectScore(address, itms){
+
+    MAX_CONSIDERABLE_AMOUNT_FOLLOWERS = 200;
+    MIN_CONSIDERABLE_AMOUNT_FOLLOWERS = 10;
+    follows_data =  GetIdentityList(address, itms)
+    .then(followers => countScore(followers));
+//    followers = follows_data["follows"]["followerCount"];
+//    if (followers < MIN_CONSIDERABLE_AMOUNT_FOLLOWERS){
+//    return 0
+//    }
+//    else if(followers < MAX_CONSIDERABLE_AMOUNT_FOLLOWERS){
+//    return (followers - MIN_CONSIDERABLE_AMOUNT_FOLLOWERS)/(MAX_CONSIDERABLE_AMOUNT_FOLLOWERS-MIN_CONSIDERABLE_AMOUNT_FOLLOWERS)*1000
+//    }
+//    else{
+//    return 1000;
+//    }
+    return follows_data;
+
+}
+
+module.exports =  {GetIdentityList, GetFollowTwitterList, GetTwitterScore, GetCyberConnectScore};
 
