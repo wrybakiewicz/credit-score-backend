@@ -1,5 +1,6 @@
 const {expect} = require("chai");
-const {getAaveAddressDetails} = require("../src/service/getAaveAddressDetails");
+const {getAaveAddressDetails, calculateAaveAddressDetailsScore} = require("../src/service/getAaveAddressDetails");
+const {emptyAaveAddressDetails, exampleAaveAddressDetails} = require("../testData/exampleAaaveAddressDetails");
 
 
 describe('test getAaveAddressDetails', function () {
@@ -34,4 +35,13 @@ describe('test getAaveAddressDetails', function () {
         });
     });
 
+    it('should calculate score for aave details', () => {
+        const score = calculateAaveAddressDetailsScore(exampleAaveAddressDetails);
+        expect(score).to.be.equal(853.7267599977874);
+    });
+
+    it('should calculate score for aave with no borrows', () => {
+        const score = calculateAaveAddressDetailsScore(emptyAaveAddressDetails);
+        expect(score).to.be.equal(500);
+    });
 });

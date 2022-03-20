@@ -1,6 +1,6 @@
 const axios = require('axios');
 const moment = require("moment");
-const {formatMomentAsDateTime} = require("./helpers");
+const {formatMomentAsDateTime, toMoment} = require("./helpers");
 require('dotenv').config();
 
 const THE_GRAH_URL = 'https://gateway.thegraph.com/api/';
@@ -51,6 +51,8 @@ const query = (address) => `{
   }
 }`;
 
+/** Get aave details by address
+ * Returns: borrow history, liquidation history, repay history*/
 function getAaveAddressDetails(address) {
     const theGraphPromise = axios.post(URL, {query: query(address)})
     return theGraphPromise
@@ -62,17 +64,77 @@ function getAaveAddressDetails(address) {
         });
 }
 
-//TODO: calculate credit score (when borrowed, was liquidations (with significant value), how much % of total borrowed was repaid)
+/** Calculate score from aave details
+ * params: aave address details
+ * calculated by:
+ * first borrow factor - when first borrow happened (max 1.0 - if >= 1y ago, 0 when now)
+ * liquidation factor - for each liquidation 0.1 penalty
+ * borrow repay factor - factor of repay / borrow amount
+ * returns: score (0-1000)
+ * score is calculated by: 500 + (first borrow factor * liquidation factor * borrow repay factor) * 1000 */
+function calculateAaveAddressDetailsScore(aaveAddressDetails) {
+    const firstBorrowFactor = calculateFirstBorrowFactor(aaveAddressDetails.borrowHistory);
+    const liquidationFactor = calculateNumberOfLiquidationFactor(aaveAddressDetails.liquidationHistory);
+    const borrowRepayFactor = calculateBorrowRepayFactor(aaveAddressDetails.borrowHistory, aaveAddressDetails.repayHistory);
+    const score = 500 + ((firstBorrowFactor * liquidationFactor * borrowRepayFactor) * 1000);
+    return Math.min(1000, score);
+}
+
+function calculateFirstBorrowFactor(borrowHistory) {
+    const firstBorrowMoment = getFirstBorrowMoment(borrowHistory);
+    const firstBorrowDaysBefore = moment().diff(firstBorrowMoment, 'days');
+    const factor = firstBorrowDaysBefore / 365.0;
+    return Math.min(factor, 1.0);
+}
+
+function calculateNumberOfLiquidationFactor(liquidationHistory) {
+    const liquidationCount = liquidationHistory.length;
+    const liquidationMinusScore = 0.1 * liquidationCount;
+    return Math.max(1 - liquidationMinusScore, 0);
+}
+
+function calculateBorrowRepayFactor(borrowHistory, repayHistory) {
+    const totalBorrowedEth = borrowHistory
+        .map(record => (record.amount * record.currentEthPrice) / 10 ** record.decimals)
+        .reduce((element1, element2) => element1 + element2, 0);
+    const totalRepaidEth = repayHistory
+        .map(record => (record.amount * record.currentEthPrice) / 10 ** record.decimals)
+        .reduce((element1, element2) => element1 + element2, 0);
+    if(totalBorrowedEth > 0) {
+        return totalRepaidEth / totalBorrowedEth;
+    } else {
+        return 0;
+    }
+}
+
+function getFirstBorrowMoment(borrowHistory) {
+    return borrowHistory.map(element => toMoment(element.dateTime))
+        .reduce((element1, element2) => {
+            if(element1.isBefore(element2)) {
+                return element1;
+            } else {
+                return element2
+            }
+        }, moment());
+}
 
 function mapToAaveAddressDetails(aaveUser) {
-    const borrowHistory = mapToBorrowHistory(aaveUser.borrowHistory);
-    const liquidationHistory = mapToLiquidationHistory(aaveUser.liquidationCallHistory);
-    const repayHistory = mapToRepayHistory(aaveUser.repayHistory);
+    if (aaveUser) {
+        const borrowHistory = mapToBorrowHistory(aaveUser.borrowHistory);
+        const liquidationHistory = mapToLiquidationHistory(aaveUser.liquidationCallHistory);
+        const repayHistory = mapToRepayHistory(aaveUser.repayHistory);
 
-    return {
-        borrowHistory: borrowHistory,
-        liquidationHistory: liquidationHistory,
-        repayHistory: repayHistory
+        return {
+            borrowHistory: borrowHistory,
+            liquidationHistory: liquidationHistory,
+            repayHistory: repayHistory
+        }
+    } else {
+        return {
+            borrowHistory: [],
+            liquidationHistory: [],
+            repayHistory: []
+        }
     }
 }
 
@@ -116,4 +178,4 @@ function mapToRepayHistory(aaveRepayHistory) {
     });
 }
 
-module.exports = {getAaveAddressDetails}
+module.exports = {getAaveAddressDetails, calculateAaveAddressDetailsScore}
