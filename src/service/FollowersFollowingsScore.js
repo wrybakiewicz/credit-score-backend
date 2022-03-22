@@ -1,30 +1,38 @@
 const axios = require("axios");
 const needle = require('needle');
 const endpoint = 'https://api.cybertino.io/connect/';
-const headers = {
+const header = {
 "content-type": "application/json",
 };
-
-
-
-//////////////////////Twitter///////////////////////////
-const GetFollowTwitterList = async (userId) => {
-    const url_followers = `https://api.twitter.com/2/users/${userId}/followers`;
-    const url_following = `https://api.twitter.com/2/users/${userId}/following`;
-    const bearerToken = process.env.BEARER_TOKEN;
-    let users_followers = [];
-    let users_following = [];
-    let params = {
+const params = {
         "max_results": 1000,
         "user.fields": "created_at"
-    }
+    };
+const bearerToken = process.env.BEARER_TOKEN;
 
-    const options = {
+const options = {
         headers: {
             "User-Agent": "v2FollowersJS",
             "authorization": `Bearer ${bearerToken}`
         }
-    }
+    };
+//////////////////////Twitter///////////////////////////
+const GetFollowTwitterList = async (name) => {
+//const bearerToken = process.env.BEARER_TOKEN;
+url_ = `https://api.twitter.com/2/users/by/username/${name}`;
+
+return axios.get(url_, {headers: {"authorization": `Bearer ${bearerToken}`}}).then(v => {GetFollowTwitterIdList(v.data.data.id).then(c => {console.log(c["followers"]); return c["followers"];})})
+}
+
+const GetFollowTwitterIdList = async (userId) => {
+    const url_followers = `https://api.twitter.com/2/users/${userId}/followers`;
+    const url_following = `https://api.twitter.com/2/users/${userId}/following`;
+
+    let users_followers = [];
+    let users_following = [];
+
+
+
 
     let hasNextPage = true;
     let nextToken = null;
@@ -90,16 +98,16 @@ function IdentityQuery(address, str_items){
 
 
 function GetIdentityList(address, itms){
-    return axios({ url: endpoint, method: 'post', headers: headers, data:
+    return axios({ url: endpoint, method: 'post', headers: header, data:
     IdentityQuery(address, itms)}).then(response => {return {"follows": response.data["data"]["identity"], "address": address}});
 };
 
 /////////////////////////SCORE FUNCTIONS/////////////////////////
-async function GetTwitterScore(id) {
+async function GetTwitterScore(name) {
 
     MAX_CONSIDERABLE_AMOUNT_FOLLOWERS = 20000;
     MIN_CONSIDERABLE_AMOUNT_FOLLOWERS = 1000;
-    follows_data = await GetFollowTwitterList(id)
+    follows_data = await GetFollowTwitterList(name)
     followers = follows_data["followers"];
     if (followers < MIN_CONSIDERABLE_AMOUNT_FOLLOWERS){
     return 0
@@ -110,8 +118,8 @@ async function GetTwitterScore(id) {
     else{
     return 1000;
     }
-
 }
+
 function countScore(follows_data){
     MAX_CONSIDERABLE_AMOUNT_FOLLOWERS = 200;
     MIN_CONSIDERABLE_AMOUNT_FOLLOWERS = 10;
@@ -129,23 +137,10 @@ function countScore(follows_data){
 
 function GetCyberConnectScore(address, itms){
 
-    MAX_CONSIDERABLE_AMOUNT_FOLLOWERS = 200;
-    MIN_CONSIDERABLE_AMOUNT_FOLLOWERS = 10;
     follows_data =  GetIdentityList(address, itms)
     .then(followers => countScore(followers));
-//    followers = follows_data["follows"]["followerCount"];
-//    if (followers < MIN_CONSIDERABLE_AMOUNT_FOLLOWERS){
-//    return 0
-//    }
-//    else if(followers < MAX_CONSIDERABLE_AMOUNT_FOLLOWERS){
-//    return (followers - MIN_CONSIDERABLE_AMOUNT_FOLLOWERS)/(MAX_CONSIDERABLE_AMOUNT_FOLLOWERS-MIN_CONSIDERABLE_AMOUNT_FOLLOWERS)*1000
-//    }
-//    else{
-//    return 1000;
-//    }
     return follows_data;
 
 }
-
 module.exports =  {GetIdentityList, GetFollowTwitterList, GetTwitterScore, GetCyberConnectScore};
 
