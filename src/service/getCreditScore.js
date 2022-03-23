@@ -29,9 +29,6 @@ function getCreditScore(address) {
                     const poapsScore = calculatePoapsCreditScore(poaps);
                     const aaveScore = calculateAaveAddressDetailsScore(aaveAddressDetails);
 
-                    const poapsScore = calculatePoapsCreditScore(poaps);
-                    const aaveScore = calculateAaveAddressDetailsScore(aaveAddressDetails);
-
                     const creditScore = (addressCreationScore * ADDRESS_CREATION_WAGE)
                         + (accountHistoryHoldingsScore * TOKEN_HOLDING_DETAILS_WAGE)
                         + (poapsScore * POAPS_DETAILS_WAGE)
