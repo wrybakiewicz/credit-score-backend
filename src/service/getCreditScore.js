@@ -67,5 +67,5 @@ function getCreditScore(address) {
         })
     })
 }
-
+getCreditScore("0x7C04786F04c522ca664Bb8b6804E0d182eec505F")
 module.exports = {getCreditScore};

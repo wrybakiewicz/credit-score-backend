@@ -2,6 +2,7 @@ const axios = require("axios");
 const needle = require('needle');
 const {getCreditScore} = require("./getCreditScore")
 const endpoint = 'https://api.cybertino.io/connect/';
+
 const header = {
 "content-type": "application/json",
 };
@@ -144,8 +145,11 @@ returns multiplication of normalised mean weight and amount of friends (weighed 
 
 addr = [];
 const identity_list = GetIdentityList(address, " followingCount\n followerCount\n friends{list{address\n}}\n");
-identity_list.then(v => {for(var n = 0; n<v.follows.friends.list.length;n++){GetIdentityList(v.follows.friends.list[n]["address"], " followingCount\n followerCount\n friends{list{address\n}}\n").then(c => {
- addr.push(c.follows.friends.list.length); if(addr.length == v.follows.friends.list.length){ console.log(normaliseFollowRank(average(addr)*v.follows.friends.list.length)); return normaliseFollowRank(average(addr)*v.follows.friends.list.length);}})}});//addr.push(c) //
+//identity_list.then(v => {for(var n = 0; n<v.follows.friends.list.length;n++){GetIdentityList(v.follows.friends.list[n]["address"], " followingCount\n followerCount\n friends{list{address\n}}\n").then(c => {
+// addr.push(c.follows.friends.list.length); if(addr.length == v.follows.friends.list.length){ console.log(normaliseFollowRank(average(addr)*v.follows.friends.list.length)); return normaliseFollowRank(average(addr)*v.follows.friends.list.length);}})}});//addr.push(c) //
+identity_list.then(v => {for(var n = 0; n<v.follows.friends.list.length;n++){getCreditScore(v.follows.friends.list[n]["address"]).then(basicScore => {
+addr.push(basicScore); if(addr.length == v.follows.friends.list.length){console.log(average(addr)); return average(addr);}})}});
+
 }
 
 function normaliseFollowRank(unnormalised){
@@ -170,5 +174,5 @@ return 1000;
 
 const follow_rank = getFollowRankScaled("0x7C04786F04c522ca664Bb8b6804E0d182eec505F");
 
-module.exports =  {CountCybecConnectScore, GetIdentityList, GetFollowTwitterList, GetTwitterScore};
+module.exports =  {getFollowRankScaled, CountCybecConnectScore, GetIdentityList, GetFollowTwitterList, GetTwitterScore};
 
