@@ -27,7 +27,7 @@ function getAccountHistoryHoldings(address) {
  * returns: number - score from 0 to 1000, users >= 100k$ avg holdings get 1000 */
 function calculateAccountHistoryHoldingsScore(accountHistoryHoldings) {
     const accountAverageValue = accountHistoryHoldings.map(holding => holding.averageValue)
-        .reduce((element1, element2) => element1 + element2);
+        .reduce((element1, element2) => element1 + element2, 0);
     const actualToMaxValueProportion = accountAverageValue / ACCOUNT_HOLDINGS_MAX_SCORE_VALUE;
     const score = actualToMaxValueProportion * 1000;
     return Math.min(score, 1000);
