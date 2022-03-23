@@ -1,7 +1,7 @@
 const {getAccountLifetime, calculateAccountLifetimeScore} = require("./getAccountLifetime");
 const {formatMoment} = require("./helpers");
 const {getAccountHistoryHoldings, calculateAccountHistoryHoldingsScore} = require("./getAccountHistoryHoldings");
-const {GetTwitterScore, GetCyberConnectScore} = require("./FollowersFollowingsScore");
+const {CountCybecConnectScore, GetTwitterScore, GetIdentityList, GetFollowTwitterList} = require("./FollowersFollowingsScore");
 const ADDRESS_CREATION_WAGE = 0.3;
 const TOKEN_HOLDING_DETAILS_WAGE = 0.7;
 
@@ -10,16 +10,18 @@ function getCreditScore(address) {
     const accountLifetimePromise = getAccountLifetime(address);
     const accountHistoryHoldingsPromise = getAccountHistoryHoldings(address);
 
-    const GetTwitterScorePromise = GetTwitterScore("trip_meta");
-    const GetCyberConnectScorePromise = GetCyberConnectScore(address, " followingCount\n followerCount");
+    const GetFollowTwitterListPromise = GetFollowTwitterList("trip_meta");
+    const GetIdentityListPromise = GetIdentityList(address, " followingCount\n followerCount");
 
-   // return GetTwitterScorePromise.then(twitterScorePromise =>{
-    //return GetCyberConnectScorePromise.then(cyberConnectScore => {
+    return GetFollowTwitterListPromise.then(followTwitterList =>{
+    return GetIdentityListPromise.then(identityList => {
         return accountLifetimePromise.then(accountLifetime => {
             return accountHistoryHoldingsPromise.then(accountHistoryHoldings => {
 
                 const addressCreationScore = calculateAccountLifetimeScore(accountLifetime);
                 const accountHistoryHoldingsScore = calculateAccountHistoryHoldingsScore(accountHistoryHoldings);
+                const twitterScore = GetTwitterScore(followTwitterList);
+                const cyberConnectScore = CountCybecConnectScore(identityList);
                 const creditScore = (addressCreationScore * ADDRESS_CREATION_WAGE) + (accountHistoryHoldingsScore * TOKEN_HOLDING_DETAILS_WAGE);
                 return {
                     score: creditScore,
@@ -40,8 +42,8 @@ function getCreditScore(address) {
                 }
             })
         })
-   // })
-    //})
+    })
+    })
 
 }
 

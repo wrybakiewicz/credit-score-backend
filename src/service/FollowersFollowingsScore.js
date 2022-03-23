@@ -21,7 +21,7 @@ const GetFollowTwitterList = async (name) => {
 //const bearerToken = process.env.BEARER_TOKEN;
 url_ = `https://api.twitter.com/2/users/by/username/${name}`;
 
-return axios.get(url_, {headers: {"authorization": `Bearer ${bearerToken}`}}).then(v => {GetFollowTwitterIdList(v.data.data.id).then(c => {console.log(c["followers"]); return c["followers"];})})
+return axios.get(url_, {headers: {"authorization": `Bearer ${bearerToken}`}}).then(v => {GetFollowTwitterIdList(v.data.data.id).then(c => {return c;})})
 }
 
 const GetFollowTwitterIdList = async (userId) => {
@@ -103,11 +103,11 @@ function GetIdentityList(address, itms){
 };
 
 /////////////////////////SCORE FUNCTIONS/////////////////////////
-async function GetTwitterScore(name) {
+async function GetTwitterScore(follows_data) {
 
     MAX_CONSIDERABLE_AMOUNT_FOLLOWERS = 20000;
     MIN_CONSIDERABLE_AMOUNT_FOLLOWERS = 1000;
-    follows_data = await GetFollowTwitterList(name)
+//    follows_data = await GetFollowTwitterList(name)
     followers = follows_data["followers"];
     if (followers < MIN_CONSIDERABLE_AMOUNT_FOLLOWERS){
     return 0
@@ -120,7 +120,7 @@ async function GetTwitterScore(name) {
     }
 }
 
-function countScore(follows_data){
+function CountCybecConnectScore(follows_data){
     MAX_CONSIDERABLE_AMOUNT_FOLLOWERS = 200;
     MIN_CONSIDERABLE_AMOUNT_FOLLOWERS = 10;
     followers = follows_data["follows"]["followerCount"];
@@ -135,12 +135,13 @@ function countScore(follows_data){
         }
 }
 
-function GetCyberConnectScore(address, itms){
+//function GetCyberConnectScore(address, itms){
+//
+//    follows_data =  GetIdentityList(address, itms)
+//    .then(followers => CountCybecConnectScore(followers));
+//    return follows_data;
+//
+//}
 
-    follows_data =  GetIdentityList(address, itms)
-    .then(followers => countScore(followers));
-    return follows_data;
-
-}
-module.exports =  {GetIdentityList, GetFollowTwitterList, GetTwitterScore, GetCyberConnectScore};
+module.exports =  {CountCybecConnectScore, GetIdentityList, GetFollowTwitterList, GetTwitterScore};
 
