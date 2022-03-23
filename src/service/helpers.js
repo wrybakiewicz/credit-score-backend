@@ -1,6 +1,16 @@
+const moment = require("moment");
+
 /** Format moment to date string*/
-function formatMoment(moment) {
-    return moment.format("MM/DD/YYYY");
+function formatMomentAsDate(moment) {
+    return moment.format("DD/MM/YYYY");
 }
 
-module.exports = {formatMoment};
+function formatMomentAsDateTime(moment) {
+    return moment.format("DD/MM/YYYY HH:mm:ss");
+}
+
+function toMoment(string) {
+    return moment(string, "DD/MM/YYYY HH:mm:ss");
+}
+
+module.exports = {formatMomentAsDate, formatMomentAsDateTime, toMoment};

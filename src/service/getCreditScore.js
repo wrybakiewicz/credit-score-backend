@@ -29,8 +29,13 @@ function getCreditScore(address) {
                     const poapsScore = calculatePoapsCreditScore(poaps);
                     const aaveScore = calculateAaveAddressDetailsScore(aaveAddressDetails);
 
+                    const poapsScore = calculatePoapsCreditScore(poaps);
+                    const aaveScore = calculateAaveAddressDetailsScore(aaveAddressDetails);
+
                     const creditScore = (addressCreationScore * ADDRESS_CREATION_WAGE)
-                        + (accountHistoryHoldingsScore * TOKEN_HOLDING_DETAILS_WAGE);
+                        + (accountHistoryHoldingsScore * TOKEN_HOLDING_DETAILS_WAGE)
+                        + (poapsScore * POAPS_DETAILS_WAGE)
+                        + (aaveScore * AAVE_ADDRESS_DETAILS_WAGE);
                     return {
                         score: creditScore,
                         basicScore: creditScore,
@@ -67,5 +72,5 @@ function getCreditScore(address) {
         })
     })
 }
-getCreditScore("0x7C04786F04c522ca664Bb8b6804E0d182eec505F")
+
 module.exports = {getCreditScore};
