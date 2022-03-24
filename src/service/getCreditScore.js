@@ -33,10 +33,23 @@ function getMeanOfFriendsSocialScore(address) {
     const identity_list = GetIdentityList(address, " followingCount\n followerCount\n friends{list{address\n}}\n");
 
     return identity_list.then(v => {
-        if (v.follows.friends.list.length)
-            return invokeScoreCall(v.follows.friends.list, v.follows.friends.list.length - 1, addr);
+        if (v.follows.friends.list.length){
+            creditScorePromise = [];
+            v.follows.friends.list.map((item) => {
+                creditScorePromise.push(getCreditScore(item.address, true)); });
+            return Promise.all(creditScorePromise).then(ScoresArr => {
+                friendCreditScore = [];
+                ScoresArr.map((item) => {friendCreditScore.push(item.basicScore)});
+                return average(friendCreditScore);
+            })
+        }
         else return 0;
     });
+    // return identity_list.then(v => {
+    //     if (v.follows.friends.list.length)
+    //         return invokeScoreCall(v.follows.friends.list, v.follows.friends.list.length - 1, addr);
+    //     else return 0;
+    // });
 }
 
 
