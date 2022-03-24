@@ -4,6 +4,36 @@ const {getAccountHistoryHoldings, calculateAccountHistoryHoldingsScore} = requir
 const {getPoaps, calculatePoapsCreditScore} = require("./getPoaps");
 const {retryIfFailed} = require("./retryService");
 const {getAaveAddressDetails, calculateAaveAddressDetailsScore} = require("./getAaveAddressDetails");
+const {GetIdentityList, average} = require("./FollowersFollowingsScore");
+
+
+function invokeScoreCall(_list, iter, addr) {
+    return getCreditScore(_list[iter]["address"]).then(basicScore => {
+        addr.push(basicScore.basicScore);
+        if (iter !== 0) {
+            return invokeScoreCall(_list, iter - 1, addr);
+        } else {
+            return average(addr);
+        }
+    });
+
+}
+
+function getFollowRankScaled(address) {
+    /**
+     returns friends social score mean of particular address
+     */
+    addr = [];
+
+    const identity_list = GetIdentityList(address, " followingCount\n followerCount\n friends{list{address\n}}\n");
+
+    return identity_list.then(v => {
+        // var a = v.follows.friends.list.length;
+        return invokeScoreCall(v.follows.friends.list, v.follows.friends.list.length - 1, addr);
+
+    });
+}
+
 
 
 const ADDRESS_CREATION_WAGE = 0.25;
@@ -70,4 +100,4 @@ function getCreditScore(address) {
     })
 }
 
-module.exports = {getCreditScore};
+module.exports = {getFollowRankScaled, getCreditScore};
