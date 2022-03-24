@@ -1,7 +1,7 @@
 const axios = require("axios");
 const needle = require('needle');
 const endpoint = 'https://api.cybertino.io/connect/';
-
+require('dotenv').config();
 const header = {
     "content-type": "application/json",
 };
@@ -19,58 +19,49 @@ const options = {
 };
 //////////////////////Twitter///////////////////////////
 const GetFollowTwitterList = async (name) => {
-//const bearerToken = process.env.BEARER_TOKEN;
-    url_ = `https://api.twitter.com/2/users/by/username/${name}`;
 
-    return axios.get(url_, {headers: {"authorization": `Bearer ${bearerToken}`}}).then(v => {
-        GetFollowTwitterIdList(v.data.data.id).then(c => {
+    url_ = `https://api.twitter.com/2/users/by/username/${name}`;
+    const option = {
+        url: url_, method: 'get', headers: {
+
+            "authorization": `Bearer ${bearerToken}`
+        }
+    };
+    return axios(option).then(v => {
+        return GetFollowTwitterIdList(v.data.data.id).then(c => {
             return c;
-        })
+        });
     })
+}
+
+async function iterateThroughFollowers(url_follow) {
+    let hasNextPage = true;
+    let nextToken = null;
+    users_follow = [];
+    while (hasNextPage) {
+        let resp_follow = await getPage(params, options, nextToken, url_follow);
+        if (resp_follow && resp_follow.meta && resp_follow.meta.result_count && resp_follow.meta.result_count > 0) {
+            if (resp_follow.data) {
+                users_follow.push.apply(users_follow, resp_follow.data);
+            }
+            if (resp_follow.meta.next_token) {
+                nextToken = resp_follow.meta.next_token;
+            } else {
+                hasNextPage = false;
+            }
+        } else {
+            hasNextPage = false;
+        }
+    }
+    return users_follow;
 }
 
 const GetFollowTwitterIdList = async (userId) => {
     const url_followers = `https://api.twitter.com/2/users/${userId}/followers`;
     const url_following = `https://api.twitter.com/2/users/${userId}/following`;
 
-    let users_followers = [];
-    let users_following = [];
-
-
-    let hasNextPage = true;
-    let nextToken = null;
-    while (hasNextPage) {
-        let resp_followers = await getPage(params, options, nextToken, url_followers);
-        if (resp_followers && resp_followers.meta && resp_followers.meta.result_count && resp_followers.meta.result_count > 0) {
-            if (resp_followers.data) {
-                users_followers.push.apply(users_followers, resp_followers.data);
-            }
-            if (resp_followers.meta.next_token) {
-                nextToken = resp_followers.meta.next_token;
-            } else {
-                hasNextPage = false;
-            }
-        } else {
-            hasNextPage = false;
-        }
-    }
-    hasNextPage = true;
-    nextToken = null;
-    while (hasNextPage) {
-        let resp_following = await getPage(params, options, nextToken, url_following);
-        if (resp_following && resp_following.meta && resp_following.meta.result_count && resp_following.meta.result_count > 0) {
-            if (resp_following.data) {
-                users_following.push.apply(users_following, resp_following.data);
-            }
-            if (resp_following.meta.next_token) {
-                nextToken = resp_following.meta.next_token;
-            } else {
-                hasNextPage = false;
-            }
-        } else {
-            hasNextPage = false;
-        }
-    }
+    let users_followers = await iterateThroughFollowers(url_followers);
+    let users_following = await iterateThroughFollowers(url_following);
 
     return {"followers": users_followers.length, "following": users_following.length};
 
@@ -139,17 +130,6 @@ function CountCybecConnectScore(follows_data) {
     }
 }
 
-
-//function GetCyberConnectScore(address, itms){
-//
-//    follows_data =  GetIdentityList(address, itms)
-//    .then(followers => CountCybecConnectScore(followers));
-//    return follows_data;
-//
-//}
-
-
-//const follow_rank = getFollowRankScaled("0x7C04786F04c522ca664Bb8b6804E0d182eec505F");
 
 module.exports = {CountCybecConnectScore, GetIdentityList, GetFollowTwitterList, GetTwitterScore, average};
 

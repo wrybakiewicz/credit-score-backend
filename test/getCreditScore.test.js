@@ -1,7 +1,8 @@
 const {expect} = require("chai");
-const {getCreditScore, getFollowRankScaled} = require('../src/service/getCreditScore')
+const {getCreditScore, getMeanOfFriendsSocialScore} = require('../src/service/getCreditScore')
 
 describe('test getCreditScore', function () {
+    this.timeout(300000);
     it('should return credit score', async function () {
         const creditScore = await getCreditScore("0x660f26fbc540ec5def5639a7a6018869298590cc");
         expect(creditScore.score).to.be.greaterThanOrEqual(0);
@@ -94,13 +95,13 @@ describe('test getCreditScore', function () {
             expect(details.dateTime).to.be.an('string');
         });
     });
-   it('should return credit score for random address', async function () {
-       await getCreditScore("0x4059973680e687452e5e6c29ea3be8d2904958c3");
-   });
+    it('should return credit score for random address', async function () {
+        await getCreditScore("0x4059973680e687452e5e6c29ea3be8d2904958c3");
+    });
 
     it('credit score of high quality friends', async function () {
-        const follow_rank = await getFollowRankScaled("0x5fd9b0B7e15B4d106624ea9CF96602996c9c344D");
-        console.warn("follow rank: "+ follow_rank);
-        // expect(follow_rank).to.be.greaterThanOrEqual(0);
+        const follow_rank = await getMeanOfFriendsSocialScore("0x5fd9b0B7e15B4d106624ea9CF96602996c9c344D");
+        expect(follow_rank).to.be.greaterThanOrEqual(560);
+
     });
 });
