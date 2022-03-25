@@ -63,7 +63,7 @@ const GetFollowTwitterIdList = async (userId) => {
     let users_followers = await iterateThroughFollowers(url_followers);
     let users_following = await iterateThroughFollowers(url_following);
 
-    return {"followers": users_followers.length, "following": users_following.length};
+    return {"followers": users_followers.length, "following": users_following.length};//, "following": users_following.length
 
 }
 
@@ -102,12 +102,12 @@ function GetIdentityList(address, itms) {
 };
 
 /////////////////////////SCORE FUNCTIONS/////////////////////////
-async function GetTwitterScore(follows_data) {
+function calculateTwitterScore(follows_data) {
 
     MAX_CONSIDERABLE_AMOUNT_FOLLOWERS = 20000;
     MIN_CONSIDERABLE_AMOUNT_FOLLOWERS = 1000;
 //    follows_data = await GetFollowTwitterList(name)
-    followers = follows_data["followers"];
+    const followers = follows_data["followers"];
     if (followers < MIN_CONSIDERABLE_AMOUNT_FOLLOWERS) {
         return 0
     } else if (followers < MAX_CONSIDERABLE_AMOUNT_FOLLOWERS) {
@@ -131,5 +131,5 @@ function CountCybecConnectScore(follows_data) {
 }
 
 
-module.exports = {CountCybecConnectScore, GetIdentityList, GetFollowTwitterList, GetTwitterScore, average};
+module.exports = {CountCybecConnectScore, GetIdentityList, GetFollowTwitterList, calculateTwitterScore, average};
 
