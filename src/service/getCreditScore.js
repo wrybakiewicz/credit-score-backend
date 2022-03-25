@@ -60,7 +60,7 @@ function getCreditScore(address, isItRecurrentInvoke = false) {
                         const accountHistoryHoldingsScore = calculateAccountHistoryHoldingsScore(accountHistoryHoldings);
                         const poapsScore = calculatePoapsCreditScore(poaps);
                         const aaveScore = calculateAaveAddressDetailsScore(aaveAddressDetails);
-                        const twitterScore = calculateTwitterScore(twitterList);
+                        const twitterScore = calculateTwitterScore(twitterList.followers_count);
 
                         const basicCreditScore = (addressCreationScore * ADDRESS_CREATION_WAGE)
                             + (accountHistoryHoldingsScore * TOKEN_HOLDING_DETAILS_WAGE)
@@ -99,8 +99,9 @@ function getCreditScore(address, isItRecurrentInvoke = false) {
                                     },
                                     twitterDetails: {
                                         details: {
-                                            followers: twitterList.followers,
-                                            followings: twitterList.following
+                                            followers: twitterList.followers_count,
+                                            followings: twitterList.following_count,
+                                            tweet_count: twitterList.tweet_count
                                         }
                                     }
                                 }
@@ -140,8 +141,9 @@ function getCreditScore(address, isItRecurrentInvoke = false) {
                                             },
                                             twitterDetails: {
                                                 details: {
-                                                    followers: twitterList.followers,
-                                                    followings: twitterList.following
+                                                    followers: twitterList.followers_count,
+                                                    followings: twitterList.following_count,
+                                                    tweet_count: twitterList.tweet_count
                                                 }
                                             }
                                         }
