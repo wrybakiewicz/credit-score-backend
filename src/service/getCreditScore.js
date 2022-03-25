@@ -124,7 +124,9 @@ function getCreditScore(address, isCalculatingBasicCreditScore = false) {
                                                     followers: twitterList.followers_count,
                                                     followings: twitterList.following_count,
                                                     tweet_count: twitterList.tweet_count
-                                                }
+                                                },
+                                                wage: TWITTER_WAGE,
+                                                score: twitterScore
                                             }
                                         }
                                     }

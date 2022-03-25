@@ -105,6 +105,8 @@ describe('test getCreditScore', function () {
         const creditscore = await getCreditScore("0x4059973680e687452e5e6c29ea3be8d2904958c3");
         expect(creditscore.details.twitterDetails.details.followers).to.be.greaterThanOrEqual(30);
         expect(creditscore.details.twitterDetails.details.followings).to.be.greaterThanOrEqual(180);
+        expect(creditscore.details.twitterDetails.wage).to.be.equal(0.1);
+
     });
 
     it('should return credit score for random address', async function () {
