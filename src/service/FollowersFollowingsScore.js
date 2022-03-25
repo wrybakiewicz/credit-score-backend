@@ -20,7 +20,6 @@ const options = {
 //////////////////////Twitter///////////////////////////
 const GetFollowTwitterList = async (name) => {
 
-    // url_ = `https://api.twitter.com/2/users/by/username/${name}`;
     url_ = `https://api.twitter.com/2/users/by/username/${name}?user.fields=public_metrics`;
     const option = {
         url: url_, method: 'get', headers: {
