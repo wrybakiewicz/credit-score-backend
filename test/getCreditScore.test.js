@@ -130,4 +130,9 @@ describe('test getCreditScore', function () {
         expect(creditScore.details.cyberConnectDetails.details.followerCount).to.be.greaterThanOrEqual(2189);
         expect(creditScore.details.cyberConnectDetails.details.friends.length).to.be.greaterThanOrEqual(7);
     });
+
+    it('should calculate for new address', async function () {
+        const creditScore = await getCreditScore("0x66a2fe2049c352C0092F6500f668C1104F4dD6eE");
+        expect(creditScore.score).to.be.greaterThanOrEqual(0);
+    });
 });

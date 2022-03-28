@@ -17,17 +17,17 @@ describe('test getAccountLifetime', function () {
     });
 
     it('should calculate score for 1 day account', () => {
-        const score = calculateAccountLifetimeScore({lifetimeInDays: 1});
+        const score = calculateAccountLifetimeScore({lifetimeInDays: 1, created: "1"});
         expect(score).to.be.equal(2.73972602739726);
     });
 
     it('should calculate score for 200 days account', () => {
-        const score = calculateAccountLifetimeScore({lifetimeInDays: 200});
+        const score = calculateAccountLifetimeScore({lifetimeInDays: 200, created: "1"});
         expect(score).to.be.equal(547.945205479452);
     });
 
     it('should calculate score for 700 days account', () => {
-        const score = calculateAccountLifetimeScore({lifetimeInDays: 700});
+        const score = calculateAccountLifetimeScore({lifetimeInDays: 700, created: "1"});
         expect(score).to.be.equal(1000);
     });
 });
