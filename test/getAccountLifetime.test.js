@@ -7,7 +7,7 @@ describe('test getAccountLifetime', function () {
     it('should return correct lifetime from first transactions', async function () {
         const lifetime = await getAccountLifetime("0x8A03E0daB7E83076Af7200B09780Af7856F0298D");
         expect(lifetime.lifetimeInDays).to.be.greaterThanOrEqual(356);
-        expect(formatMomentAsDate(lifetime.created)).to.be.equal("24-03-2021");
+        expect(formatMomentAsDate(lifetime.created)).to.be.equal("24 March 2021");
     });
 
     it('should return undefined if address does not have transactions', async function () {

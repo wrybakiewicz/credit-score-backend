@@ -117,6 +117,9 @@ function getCreditScore(address, isCalculatingBasicCreditScore = false) {
                                                     score: aaveScore
                                                 },
                                                 friendsSocialScore: {
+                                                    details: {
+                                                        friends: cyberConnectDetails.friends
+                                                    },
                                                     wage: FRIENDS_SOCIAL_SCORE_WAGE,
                                                     score: friendsSocialScore
                                                 },

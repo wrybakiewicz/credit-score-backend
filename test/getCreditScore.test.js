@@ -7,7 +7,7 @@ describe('test getCreditScore', function () {
         expect(creditScore.score).to.be.greaterThanOrEqual(0);
         //address creation details
         expect(creditScore.details.addressCreation.details.lifetimeInDays).to.be.greaterThanOrEqual(469);
-        expect(creditScore.details.addressCreation.details.created).to.be.equal("02-12-2020");
+        expect(creditScore.details.addressCreation.details.created).to.be.equal("02 December 2020");
         expect(creditScore.details.addressCreation.score).to.be.greaterThanOrEqual(0);
         expect(creditScore.details.addressCreation.wage).to.be.equal(0.25);
         //token holdings details
@@ -47,7 +47,7 @@ describe('test getCreditScore', function () {
         expect(creditScore.score).to.be.greaterThanOrEqual(0);
         //address creation details
         expect(creditScore.details.addressCreation.details.lifetimeInDays).to.be.greaterThanOrEqual(0);
-        expect(creditScore.details.addressCreation.details.created).to.be.equal("25-12-2020");
+        expect(creditScore.details.addressCreation.details.created).to.be.equal("25 December 2020");
         expect(creditScore.details.addressCreation.score).to.be.greaterThanOrEqual(0);
         expect(creditScore.details.addressCreation.wage).to.be.equal(0.25);
         //token holdings details
@@ -123,6 +123,8 @@ describe('test getCreditScore', function () {
         //friends social score
         expect(creditScore.details.friendsSocialScore.wage).to.be.equal(0.1);
         expect(creditScore.details.friendsSocialScore.score).to.be.greaterThanOrEqual(560);
+        expect(creditScore.details.friendsSocialScore.details.friends.length).to.be.greaterThanOrEqual(1);
+
         //cyber connect details
         expect(creditScore.details.cyberConnectDetails.wage).to.be.equal(0.1);
         expect(creditScore.details.cyberConnectDetails.score).to.be.equal(1000);
