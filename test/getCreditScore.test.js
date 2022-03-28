@@ -38,7 +38,7 @@ describe('test getCreditScore', function () {
         expect(creditScore.details.aaveAddressDetails.details.liquidationHistory.length).to.be.equal(0);
         expect(creditScore.details.aaveAddressDetails.details.repayHistory.length).to.be.equal(0);
         //friends social score
-        expect(creditScore.details.friendsSocialScore.wage).to.be.equal(0.2);
+        expect(creditScore.details.friendsSocialScore.wage).to.be.equal(0.1);
         expect(creditScore.details.friendsSocialScore.score).to.be.equal(0);
         expect(creditScore.details.friendsSocialScore.details.friends.length).to.be.equal(0);
     });
@@ -96,16 +96,23 @@ describe('test getCreditScore', function () {
             expect(details.dateTime).to.be.an('string');
         });
         //friends social score
-        expect(creditScore.details.friendsSocialScore.wage).to.be.equal(0.2);
+        expect(creditScore.details.friendsSocialScore.wage).to.be.equal(0.1);
         expect(creditScore.details.friendsSocialScore.score).to.be.equal(0);
         expect(creditScore.details.friendsSocialScore.details.friends.length).to.be.equal(0);
     });
+
     it('should return followers and followings with TwitterList details', async function () {
-        const creditscore = await getCreditScore("0x4059973680e687452e5e6c29ea3be8d2904958c3");
-        expect(creditscore.details.twitterDetails.details.followers).to.be.greaterThanOrEqual(30);
-        expect(creditscore.details.twitterDetails.details.followings).to.be.greaterThanOrEqual(180);
+        const creditscore = await getCreditScore("0xA0Cf024D03d05303569bE9530422342E1cEaF480");
+        expect(creditscore.details.twitterDetails.details.followers).to.be.greaterThanOrEqual(20);
+        expect(creditscore.details.twitterDetails.details.followings).to.be.greaterThanOrEqual(500);
+        expect(creditscore.details.twitterDetails.details.twitterName).to.be.equal("guziec_pl");
+        expect(creditscore.details.twitterDetails.score).to.be.greaterThanOrEqual(500);
         expect(creditscore.details.twitterDetails.wage).to.be.equal(0.1);
 
+        expect(creditscore.details.cyberConnectDetails.details.followerCount).to.be.greaterThanOrEqual(1);
+        expect(creditscore.details.cyberConnectDetails.details.followingCount).to.be.greaterThanOrEqual(1);
+        expect(creditscore.details.twitterDetails.score).to.be.greaterThanOrEqual(100);
+        expect(creditscore.details.twitterDetails.wage).to.be.equal(0.1);
     });
 
     it('should return credit score for random address', async function () {
@@ -115,7 +122,7 @@ describe('test getCreditScore', function () {
     it('credit score of high quality friends', async function () {
         const creditScore = await getCreditScore("0x5fd9b0B7e15B4d106624ea9CF96602996c9c344D");
         //friends social score
-        expect(creditScore.details.friendsSocialScore.wage).to.be.equal(0.2);
+        expect(creditScore.details.friendsSocialScore.wage).to.be.equal(0.1);
         expect(creditScore.details.friendsSocialScore.score).to.be.greaterThanOrEqual(560);
         expect(creditScore.details.friendsSocialScore.details.friends.length).to.be.greaterThanOrEqual(5);
     });
