@@ -6,15 +6,15 @@ describe('test getCreditScore', function () {
         const creditScore = await getCreditScore("0x660f26fbc540ec5def5639a7a6018869298590cc");
         expect(creditScore.score).to.be.greaterThanOrEqual(0);
         //address creation details
-        expect(creditScore.details.addressCreation.lifetimeInDays).to.be.greaterThanOrEqual(469);
-        expect(creditScore.details.addressCreation.created).to.be.equal("02/12/2020");
+        expect(creditScore.details.addressCreation.details.lifetimeInDays).to.be.greaterThanOrEqual(469);
+        expect(creditScore.details.addressCreation.details.created).to.be.equal("02/12/2020");
         expect(creditScore.details.addressCreation.score).to.be.greaterThanOrEqual(0);
         expect(creditScore.details.addressCreation.wage).to.be.equal(0.25);
         //token holdings details
-        expect(creditScore.details.tokenHoldingDetails.details.length).to.be.equal(4);
+        expect(creditScore.details.tokenHoldingDetails.details.tokenHoldingList.length).to.be.equal(4);
         expect(creditScore.details.tokenHoldingDetails.score).to.be.greaterThanOrEqual(0);
         expect(creditScore.details.tokenHoldingDetails.wage).to.be.equal(0.3);
-        creditScore.details.tokenHoldingDetails.details.forEach(details => {
+        creditScore.details.tokenHoldingDetails.details.tokenHoldingList.forEach(details => {
             expect(details.tokenTicker).to.be.an("string");
             expect(details.token).to.be.an("string");
             expect(details.decimals).to.be.greaterThanOrEqual(1);
@@ -24,8 +24,8 @@ describe('test getCreditScore', function () {
         //poaps
         expect(creditScore.details.poapsDetails.score).to.be.equal(1000);
         expect(creditScore.details.poapsDetails.wage).to.be.equal(0.05);
-        expect(creditScore.details.poapsDetails.poaps.length).to.be.equal(3);
-        creditScore.details.poapsDetails.poaps.forEach(poap => {
+        expect(creditScore.details.poapsDetails.details.poaps.length).to.be.equal(3);
+        creditScore.details.poapsDetails.details.poaps.forEach(poap => {
             expect(poap.name).to.be.an("string");
             expect(poap.imageUrl).to.be.an("string");
             expect(poap.dateTime).to.be.an("string");
@@ -45,15 +45,15 @@ describe('test getCreditScore', function () {
         const creditScore = await getCreditScore("0x0005f124d6a49c29764b1db08546108ca0afeb68");
         expect(creditScore.score).to.be.greaterThanOrEqual(0);
         //address creation details
-        expect(creditScore.details.addressCreation.lifetimeInDays).to.be.greaterThanOrEqual(0);
-        expect(creditScore.details.addressCreation.created).to.be.equal("25/12/2020");
+        expect(creditScore.details.addressCreation.details.lifetimeInDays).to.be.greaterThanOrEqual(0);
+        expect(creditScore.details.addressCreation.details.created).to.be.equal("25/12/2020");
         expect(creditScore.details.addressCreation.score).to.be.greaterThanOrEqual(0);
         expect(creditScore.details.addressCreation.wage).to.be.equal(0.25);
         //token holdings details
-        expect(creditScore.details.tokenHoldingDetails.details.length).to.be.equal(5);
+        expect(creditScore.details.tokenHoldingDetails.details.tokenHoldingList.length).to.be.equal(5);
         expect(creditScore.details.tokenHoldingDetails.score).to.be.greaterThanOrEqual(0);
         expect(creditScore.details.tokenHoldingDetails.wage).to.be.equal(0.3);
-        creditScore.details.tokenHoldingDetails.details.forEach(details => {
+        creditScore.details.tokenHoldingDetails.details.tokenHoldingList.forEach(details => {
             expect(details.tokenTicker).to.be.an("string");
             expect(details.token).to.be.an("string");
             expect(details.decimals).to.be.greaterThanOrEqual(1);
@@ -63,7 +63,7 @@ describe('test getCreditScore', function () {
         //poaps
         expect(creditScore.details.poapsDetails.score).to.be.equal(0);
         expect(creditScore.details.poapsDetails.wage).to.be.equal(0.05);
-        expect(creditScore.details.poapsDetails.poaps.length).to.be.equal(0);
+        expect(creditScore.details.poapsDetails.details.poaps.length).to.be.equal(0);
         //aave details
         expect(creditScore.details.aaveAddressDetails.wage).to.be.equal(0.1);
         expect(creditScore.details.aaveAddressDetails.score).to.be.greaterThan(500);

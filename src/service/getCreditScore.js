@@ -41,11 +41,12 @@ const CYBER_CONNECT_SCORE_WAGE = 0.1
  * score - calculated score based on all indicators
  * basicScore - calculated score based on all indicators except address 'connections' - to avoid recursion */
 function getCreditScore(address, isCalculatingBasicCreditScore = false) {
-    const accountLifetimePromise = retryIfFailed(() => getAccountLifetime(address));
-    const accountHistoryHoldingsPromise = retryIfFailed(() => getAccountHistoryHoldings(address));
-    const poapsPromise = retryIfFailed(() => getPoaps(address));
-    const aaveAddressDetailsPromise = retryIfFailed(() => getAaveAddressDetails(address));
-    const cyberConnectDetailsPromise = retryIfFailed(() => getCyberConnectDetails(address));
+    const addressLowerCase = address.toLowerCase();
+    const accountLifetimePromise = retryIfFailed(() => getAccountLifetime(addressLowerCase));
+    const accountHistoryHoldingsPromise = retryIfFailed(() => getAccountHistoryHoldings(addressLowerCase));
+    const poapsPromise = retryIfFailed(() => getPoaps(addressLowerCase));
+    const aaveAddressDetailsPromise = retryIfFailed(() => getAaveAddressDetails(addressLowerCase));
+    const cyberConnectDetailsPromise = retryIfFailed(() => getCyberConnectDetails(addressLowerCase));
 
     return cyberConnectDetailsPromise.then(cyberConnectDetails => {
         return retryIfFailed(() => GetFollowTwitterList(cyberConnectDetails.twitterName)).then(twitterList => {
@@ -85,18 +86,24 @@ function getCreditScore(address, isCalculatingBasicCreditScore = false) {
                                             score: creditScore,
                                             details: {
                                                 addressCreation: {
-                                                    lifetimeInDays: accountLifetime.lifetimeInDays,
-                                                    created: formatMomentAsDate(accountLifetime.created),
+                                                    details: {
+                                                        lifetimeInDays: accountLifetime.lifetimeInDays,
+                                                        created: formatMomentAsDate(accountLifetime.created)
+                                                    },
                                                     score: addressCreationScore,
                                                     wage: ADDRESS_CREATION_WAGE
                                                 },
                                                 tokenHoldingDetails: {
-                                                    details: accountHistoryHoldings,
+                                                    details: {
+                                                        tokenHoldingList: accountHistoryHoldings
+                                                    },
                                                     wage: TOKEN_HOLDING_DETAILS_WAGE,
                                                     score: accountHistoryHoldingsScore
                                                 },
                                                 poapsDetails: {
-                                                    poaps: poaps,
+                                                    details: {
+                                                        poaps: poaps,
+                                                    },
                                                     wage: POAPS_DETAILS_WAGE,
                                                     score: poapsScore
                                                 },
