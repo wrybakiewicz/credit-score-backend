@@ -2,7 +2,6 @@ const {expect} = require("chai");
 const {getCreditScore, getFriendsSocialScore} = require('../src/service/getCreditScore')
 
 describe('test getCreditScore', function () {
-    this.timeout(300000);
     it('should return credit score', async function () {
         const creditScore = await getCreditScore("0x660f26fbc540ec5def5639a7a6018869298590cc");
         expect(creditScore.score).to.be.greaterThanOrEqual(0);

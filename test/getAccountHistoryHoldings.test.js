@@ -3,7 +3,6 @@ const {getAccountHistoryHoldings, calculateAccountHistoryHoldingsScore} = requir
 const {exampleHoldings1, exampleHoldings2} = require("../testData/exampleHoldings");
 
 describe('test getAccountHistoryHoldings', function () {
-    this.timeout(300000);
     it('should return token balances for one address', async function () {
         const holdings = await getAccountHistoryHoldings("0x8cD96764d9c51c474F62A316DE72bB72a17c20f4");
         expect(holdings.length).to.be.equal(2);

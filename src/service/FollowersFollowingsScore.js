@@ -1,22 +1,12 @@
 const axios = require("axios");
-const needle = require('needle');
 const endpoint = 'https://api.cybertino.io/connect/';
 require('dotenv').config();
+
 const header = {
     "content-type": "application/json",
 };
-const params = {
-    "max_results": 1000,
-    "user.fields": "created_at"
-};
 const bearerToken = process.env.BEARER_TOKEN;
 
-const options = {
-    headers: {
-        "User-Agent": "v2FollowersJS",
-        "authorization": `Bearer ${bearerToken}`
-    }
-};
 //////////////////////Twitter///////////////////////////
 const GetFollowTwitterList = async (name) => {
 
@@ -28,7 +18,11 @@ const GetFollowTwitterList = async (name) => {
         }
     };
     return axios(option).then(response => {
-        return {"followers_count": response.data.data.public_metrics.followers_count, "following_count": response.data.data.public_metrics.following_count, "tweet_count": response.data.data.public_metrics.tweet_count};
+        return {
+            "followers_count": response.data.data.public_metrics.followers_count,
+            "following_count": response.data.data.public_metrics.following_count,
+            "tweet_count": response.data.data.public_metrics.tweet_count
+        };
     })
 }
 
@@ -39,7 +33,7 @@ const average = (array) => array.reduce((a, b) => a + b) / array.length;
 function IdentityQuery(address, str_items) {
     query = `query {\n identity(address: \"${address}\") {\n${str_items}\n\t}\n}`;
     return {"query": query};
-};
+}
 
 
 function GetIdentityList(address, itms) {
@@ -49,14 +43,13 @@ function GetIdentityList(address, itms) {
     }).then(response => {
         return {"follows": response.data["data"]["identity"], "address": address}
     });
-};
+}
 
 /////////////////////////SCORE FUNCTIONS/////////////////////////
 function calculateTwitterScore(follows_data) {
 
     MAX_CONSIDERABLE_AMOUNT_FOLLOWERS = 20000;
     MIN_CONSIDERABLE_AMOUNT_FOLLOWERS = 1000;
-//    follows_data = await GetFollowTwitterList(name)
     const followers = follows_data.followers_count;
     if (followers < MIN_CONSIDERABLE_AMOUNT_FOLLOWERS) {
         return 0
