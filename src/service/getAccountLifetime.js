@@ -23,17 +23,18 @@ function getAccountLifetime(address) {
  * params: account lifetime
  * returns: number - score from 0 to 1000, accounts >= 1 year get 1000 */
 function calculateAccountLifetimeScore(accountLifetime) {
-    const actualToMaxValueProportion = accountLifetime.lifetimeInDays / ACCOUNT_LIFETIME_MAX_SCORE_VALUE;
-    const score = actualToMaxValueProportion * 1000;
-    return Math.min(score, 1000);
+    if (accountLifetime) {
+        const actualToMaxValueProportion = accountLifetime.lifetimeInDays / ACCOUNT_LIFETIME_MAX_SCORE_VALUE;
+        const score = actualToMaxValueProportion * 1000;
+        return Math.min(score, 1000);
+    } else {
+        return 0;
+    }
 }
 
 function getLifetime(history) {
     if (history.length === 0) {
-        return {
-            lifetimeInDays: 0,
-            created: moment()
-        }
+        return {};
     } else {
         const firstTransaction = moment.unix(history[0].timestamp);
         const lifetimeInDays = moment().diff(firstTransaction, 'days');

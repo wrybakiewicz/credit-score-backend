@@ -37,11 +37,11 @@ describe('test getAaveAddressDetails', function () {
 
     it('should calculate score for aave details', () => {
         const score = calculateAaveAddressDetailsScore(exampleAaveAddressDetails);
-        expect(score).to.be.greaterThanOrEqual(800);
+        expect(score).to.be.greaterThanOrEqual(350);
     });
 
     it('should calculate score for aave with no borrows', () => {
         const score = calculateAaveAddressDetailsScore(emptyAaveAddressDetails);
-        expect(score).to.be.equal(500);
+        expect(score).to.be.equal(0);
     });
 });

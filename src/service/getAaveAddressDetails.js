@@ -71,12 +71,12 @@ function getAaveAddressDetails(address) {
  * liquidation factor - for each liquidation 0.1 penalty
  * borrow repay factor - factor of repay / borrow amount
  * returns: score (0-1000)
- * score is calculated by: 500 + (first borrow factor * liquidation factor * borrow repay factor) * 1000 */
+ * score is calculated by: (first borrow factor * liquidation factor * borrow repay factor) * 1000 */
 function calculateAaveAddressDetailsScore(aaveAddressDetails) {
     const firstBorrowFactor = calculateFirstBorrowFactor(aaveAddressDetails.borrowHistory);
     const liquidationFactor = calculateNumberOfLiquidationFactor(aaveAddressDetails.liquidationHistory);
     const borrowRepayFactor = calculateBorrowRepayFactor(aaveAddressDetails.borrowHistory, aaveAddressDetails.repayHistory);
-    const score = 500 + ((firstBorrowFactor * liquidationFactor * borrowRepayFactor) * 1000);
+    const score = (firstBorrowFactor * liquidationFactor * borrowRepayFactor) * 1000;
     return Math.min(1000, score);
 }
 

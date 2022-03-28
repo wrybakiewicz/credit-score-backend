@@ -1,5 +1,5 @@
 const {expect} = require("chai");
-const {getCreditScore, getFriendsSocialScore} = require('../src/service/getCreditScore')
+const {getCreditScore} = require('../src/service/getCreditScore')
 
 describe('test getCreditScore', function () {
     it('should return credit score', async function () {
@@ -7,7 +7,7 @@ describe('test getCreditScore', function () {
         expect(creditScore.score).to.be.greaterThanOrEqual(0);
         //address creation details
         expect(creditScore.details.addressCreation.details.lifetimeInDays).to.be.greaterThanOrEqual(469);
-        expect(creditScore.details.addressCreation.details.created).to.be.equal("02/12/2020");
+        expect(creditScore.details.addressCreation.details.created).to.be.equal("02-12-2020");
         expect(creditScore.details.addressCreation.score).to.be.greaterThanOrEqual(0);
         expect(creditScore.details.addressCreation.wage).to.be.equal(0.25);
         //token holdings details
@@ -33,7 +33,7 @@ describe('test getCreditScore', function () {
         });
         //aave details
         expect(creditScore.details.aaveAddressDetails.wage).to.be.equal(0.1);
-        expect(creditScore.details.aaveAddressDetails.score).to.be.equal(500);
+        expect(creditScore.details.aaveAddressDetails.score).to.be.equal(0);
         expect(creditScore.details.aaveAddressDetails.details.borrowHistory.length).to.be.equal(0);
         expect(creditScore.details.aaveAddressDetails.details.liquidationHistory.length).to.be.equal(0);
         expect(creditScore.details.aaveAddressDetails.details.repayHistory.length).to.be.equal(0);
@@ -41,12 +41,13 @@ describe('test getCreditScore', function () {
         expect(creditScore.details.friendsSocialScore.wage).to.be.equal(0.1);
         expect(creditScore.details.friendsSocialScore.score).to.be.equal(0);
     });
+
     it('should return credit score for address with aave details', async function () {
         const creditScore = await getCreditScore("0x0005f124d6a49c29764b1db08546108ca0afeb68");
         expect(creditScore.score).to.be.greaterThanOrEqual(0);
         //address creation details
         expect(creditScore.details.addressCreation.details.lifetimeInDays).to.be.greaterThanOrEqual(0);
-        expect(creditScore.details.addressCreation.details.created).to.be.equal("25/12/2020");
+        expect(creditScore.details.addressCreation.details.created).to.be.equal("25-12-2020");
         expect(creditScore.details.addressCreation.score).to.be.greaterThanOrEqual(0);
         expect(creditScore.details.addressCreation.wage).to.be.equal(0.25);
         //token holdings details
@@ -66,7 +67,7 @@ describe('test getCreditScore', function () {
         expect(creditScore.details.poapsDetails.details.poaps.length).to.be.equal(0);
         //aave details
         expect(creditScore.details.aaveAddressDetails.wage).to.be.equal(0.1);
-        expect(creditScore.details.aaveAddressDetails.score).to.be.greaterThan(500);
+        expect(creditScore.details.aaveAddressDetails.score).to.be.greaterThan(360);
         expect(creditScore.details.aaveAddressDetails.details.borrowHistory.length).to.be.greaterThanOrEqual(16);
         expect(creditScore.details.aaveAddressDetails.details.liquidationHistory.length).to.be.greaterThanOrEqual(3);
         expect(creditScore.details.aaveAddressDetails.details.repayHistory.length).to.be.greaterThanOrEqual(4);

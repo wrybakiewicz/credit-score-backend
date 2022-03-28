@@ -88,7 +88,7 @@ function getCreditScore(address, isCalculatingBasicCreditScore = false) {
                                                 addressCreation: {
                                                     details: {
                                                         lifetimeInDays: accountLifetime.lifetimeInDays,
-                                                        created: formatMomentAsDate(accountLifetime.created)
+                                                        created: accountLifetime.created ? formatMomentAsDate(accountLifetime.created) : undefined
                                                     },
                                                     score: addressCreationScore,
                                                     wage: ADDRESS_CREATION_WAGE
