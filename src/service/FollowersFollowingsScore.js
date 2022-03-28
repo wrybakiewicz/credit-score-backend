@@ -39,40 +39,36 @@ const GetFollowTwitterList = async (name) => {
 
 const average = (array) => array.reduce((a, b) => a + b) / array.length;
 
-//TODO: make 1 request from those 3
-
-/** Request cyber connect friends */
-function getCyberConnectFriends(address) {
+/** Request cyber connect details */
+function getCyberConnectDetails(address) {
     return GetIdentityList(address, `
+    followingCount
+    followerCount
     friends {
         list {
             address
         }
-    }`)
-}
-
-/** Request cyber connect twitter name */
-function getCyberConnectTwitter(address) {
-    return GetIdentityList(address, `
+    }
     social {
       twitter
-    }`).then(response => response.follows.social.twitter);
-}
-
-/** Request cyber connect twitter name */
-function getCyberConnectDetails(address) {
-    return GetIdentityList(address, `
-    followingCount
-    followerCount`).then(response => {
+    }
+    `).then(response => {
         return {
             followingCount: response.follows.followingCount,
             followerCount: response.follows.followerCount,
-        };
+            twitterName: response.follows.social.twitter,
+            friends: response.follows.friends.list.map(friend => friend.address)
+        }
     });
 }
 
-function IdentityQuery(address, str_items) {
-    query = `query {\n identity(address: \"${address}\") {\n${str_items}\n\t}\n}`;
+function IdentityQuery(address, details) {
+    query = `
+    query {
+        identity(address: \"${address}\") {
+            ${details}
+        }
+    }`;
     return {"query": query};
 }
 
@@ -111,10 +107,8 @@ function calculateCyberConnectScore(cyberConnectDetails) {
 module.exports = {
     getCyberConnectDetails,
     calculateCyberConnectScore,
-    getCyberConnectTwitter,
     GetFollowTwitterList,
     calculateTwitterScore,
     average,
-    getCyberConnectFriends
 };
 

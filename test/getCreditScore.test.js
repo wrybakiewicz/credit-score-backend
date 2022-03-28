@@ -40,7 +40,6 @@ describe('test getCreditScore', function () {
         //friends social score
         expect(creditScore.details.friendsSocialScore.wage).to.be.equal(0.1);
         expect(creditScore.details.friendsSocialScore.score).to.be.equal(0);
-        expect(creditScore.details.friendsSocialScore.details.friends.length).to.be.equal(0);
     });
     it('should return credit score for address with aave details', async function () {
         const creditScore = await getCreditScore("0x0005f124d6a49c29764b1db08546108ca0afeb68");
@@ -98,7 +97,6 @@ describe('test getCreditScore', function () {
         //friends social score
         expect(creditScore.details.friendsSocialScore.wage).to.be.equal(0.1);
         expect(creditScore.details.friendsSocialScore.score).to.be.equal(0);
-        expect(creditScore.details.friendsSocialScore.details.friends.length).to.be.equal(0);
     });
 
     it('should return followers and followings with TwitterList details', async function () {
@@ -124,6 +122,11 @@ describe('test getCreditScore', function () {
         //friends social score
         expect(creditScore.details.friendsSocialScore.wage).to.be.equal(0.1);
         expect(creditScore.details.friendsSocialScore.score).to.be.greaterThanOrEqual(560);
-        expect(creditScore.details.friendsSocialScore.details.friends.length).to.be.greaterThanOrEqual(5);
+        //cyber connect details
+        expect(creditScore.details.cyberConnectDetails.wage).to.be.equal(0.1);
+        expect(creditScore.details.cyberConnectDetails.score).to.be.equal(1000);
+        expect(creditScore.details.cyberConnectDetails.details.followingCount).to.be.greaterThanOrEqual(26);
+        expect(creditScore.details.cyberConnectDetails.details.followerCount).to.be.greaterThanOrEqual(2189);
+        expect(creditScore.details.cyberConnectDetails.details.friends.length).to.be.greaterThanOrEqual(7);
     });
 });
