@@ -34,6 +34,13 @@ const GetFollowTwitterList = async (name) => {
             tweet_count: response.data.data.public_metrics.tweet_count,
             name: name
         };
+    }).catch(_ => {
+        return {
+            followers_count: 0,
+            following_count: 0,
+            tweet_count: 0,
+            name: name
+        };
     })
 }
 

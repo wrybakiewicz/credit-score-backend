@@ -118,6 +118,10 @@ describe('test getCreditScore', function () {
         await getCreditScore("0x4059973680e687452e5e6c29ea3be8d2904958c3");
     });
 
+    it('should return credit score for another random address', async function () {
+        await getCreditScore("0x9d4562a3ea114492C6553f76aC942e63ac38915B");
+    });
+
     it('credit score of high quality friends', async function () {
         const creditScore = await getCreditScore("0x5fd9b0B7e15B4d106624ea9CF96602996c9c344D");
         //friends social score
