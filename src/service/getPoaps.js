@@ -13,7 +13,7 @@ function getPoaps(address) {
         .then(response => mapResponseToPoaps(response))
         .catch(error => {
             console.error(error);
-            throw error;
+            return [];
         });
 }
 
